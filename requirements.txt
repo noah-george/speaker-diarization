@@ -1,0 +1,15 @@
+fastapi==0.88.0
+httpx==0.24.0
+numpy==1.23.5
+pandas==1.5.3
+streamlit==1.22.0
+uvicorn==0.21.1
+torch
+torchvision
+torchtext
+torchmetrics
+torchaudio
+setuptools
+sqlalchemy 
+databases[postgresql]
+psycopg2

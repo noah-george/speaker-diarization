@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Audio Transcription and Diarization</title>
+	<link rel="stylesheet" type="text/css" href="./static/css/styles.css">
+</head>
+<body>
+	<h1>Audio Transcription and Diarization</h1>
+	<form onsubmit="event.preventDefault(); transcribeAndDiarize(event);" enctype="multipart/form-data">
+		<label for="audio-file">Upload audio file:</label>
+		<input type="file" id="audio-file" accept=".wav">
+
+		</select>
+		<button type="submit">transcribe and summarize</button>
+	</form>
+	<audio id="audio-player" controls style="display: none;"></audio>
+	<div id="loader" class="loader"></div>
+	
+
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="./static/js/scripts.js"></script>
+	<div id="output-container"></div>
+</body>
+</html>
