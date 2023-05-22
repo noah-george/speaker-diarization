@@ -1,8 +1,9 @@
 function saveTextToFile(filename) {
     const text = document.getElementById('output-container').innerText;
+    const newtext = text.replace(/\n/g, "\r\n");
     console.log("typeof filename:", typeof filename); // Check the data type of 'filename'
     console.log("typeof text",typeof text);
-    const blob = new Blob([text], { type: 'text/plain' });
+    const blob = new Blob([newtext], { type: 'text/plain' });
 
     // Create a temporary anchor element
     const anchorElement = document.createElement('a');
@@ -13,7 +14,7 @@ function saveTextToFile(filename) {
     anchorElement.click();
     axios.post('/save', {
         filename: filename,
-        content: text
+        content: newtext
     })
     .then(response => {
         console.log(response.data);
@@ -40,7 +41,7 @@ async function transcribeAndDiarize(event) {
         const response = await axios.post("/diarize", formData);
         const data = response.data;
         console.log(data);
-        outputContainer.innerHTML = JSON.stringify(data, null, 2);
+        outputContainer.innerHTML = data;
         const audioPlayer = document.getElementById('audio-player');
         audioPlayer.src = URL.createObjectURL(file);
 

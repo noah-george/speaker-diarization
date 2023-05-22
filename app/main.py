@@ -80,15 +80,14 @@ async def transcribe_and_diarize(wav_file:UploadFile=File(...)) -> 'list[dict[st
     results_segments_w_speakers = assign_speakers_fn(diarization_result, aligned_segments)
     conversation=""
     for segment in results_segments_w_speakers["segments"]:
-        conversation+=str(segment.get("speaker", "Unknown")+":"+segment["text"])+' \n'
+        conversation+=str(segment.get("speaker", "Unknown")+":"+segment["text"])
     chunk_size=200
-    conversation=[conversation[i:i+chunk_size] for i in range(0, len(conversation), chunk_size)]
-    print(conversation)
+    conversation_chunks=[conversation[i:i+chunk_size] for i in range(0, len(conversation), chunk_size)]
     summary=""
-    for chunk in conversation:
+    for chunk in conversation_chunks:
         summary+=summarize_fn(chunk)[0]["summary_text"]
-    summary="summary_text: "+summary
-    return summary
+    text="summary_text: "+summary+"conversation: "+conversation
+    return text
 
 
 if __name__=='__main__':
