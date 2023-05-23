@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-import json
-import os
 from summarize import summarize_fn
 from typing import Any
 import uvicorn
@@ -19,6 +17,7 @@ from databases import Database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Text
 from pydantic import BaseModel
+from sentiment import sentiment_analysis
 
 DATABASE_URL = "postgresql://postgres:pass%40123@localhost/transcriptions"
 database = Database(DATABASE_URL)
@@ -72,7 +71,7 @@ async def save_text_file(text_file: FileStruct):
     return {'message': 'Text file saved successfully.'}
 
 @app.post("/diarize")
-async def transcribe_and_diarize(wav_file:UploadFile=File(...)) -> 'list[dict[str, Any]]':
+async def transcribe_and_diarize(wav_file:UploadFile=File(...),labels:str=['positive', 'negative', 'neutral']) -> 'list[dict[str, Any]]':
     audio_file = whisperx.load_audio(str(wav_file.filename))
     transcript = await transcribe_audio(audio_file)
     aligned_segments = whisperx.align(transcript["segments"], model_a, metadata, audio_file, device, return_char_alignments=False)
@@ -81,12 +80,26 @@ async def transcribe_and_diarize(wav_file:UploadFile=File(...)) -> 'list[dict[st
     conversation=""
     for segment in results_segments_w_speakers["segments"]:
         conversation+=str(segment.get("speaker", "Unknown")+":"+segment["text"])
+  
     chunk_size=200
     conversation_chunks=[conversation[i:i+chunk_size] for i in range(0, len(conversation), chunk_size)]
     summary=""
+    print(type(conversation_chunks))
+    print(conversation_chunks)
+    print(len(conversation_chunks))
+    sentiment=sentiment_analysis([conversation_chunks],labels)
+    sentiment=str(sentiment)
     for chunk in conversation_chunks:
         summary+=summarize_fn(chunk)[0]["summary_text"]
-    text="summary_text: "+summary+"conversation: "+conversation
+
+    text = f"""summary_text:
+{summary}
+
+conversation:
+{conversation}
+
+sentiment:
+{sentiment}"""
     return text
 
 

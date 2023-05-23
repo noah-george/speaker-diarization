@@ -1,3 +1,17 @@
+function addString() {
+    const inputField = document.getElementById('input-field');
+    const string = inputField.value.trim();
+    
+    if (string !== '') {
+      const stringList = document.getElementById('string-items');
+      const listItem = document.createElement('li');
+      listItem.textContent = string;
+      stringList.appendChild(listItem);
+      
+      inputField.value = ''; // Clear the input field
+    }
+  }
+
 function saveTextToFile(filename) {
     const text = document.getElementById('output-container').innerText;
     const newtext = text.replace(/\n/g, "\r\n");
@@ -32,6 +46,9 @@ async function transcribeAndDiarize(event) {
     const file = document.getElementById("audio-file").files[0];
     const formData = new FormData();
     formData.append("wav_file", file);
+    const stringList = Array.from(document.getElementById("string-items").getElementsByTagName("li"));
+    const strings = stringList.map(item => item.textContent.trim());
+    formData.append("labels", JSON.stringify(strings));
     const outputContainer = document.getElementById("output-container");
     const loader = document.getElementById("loader");
     outputContainer.innerHTML = "";
