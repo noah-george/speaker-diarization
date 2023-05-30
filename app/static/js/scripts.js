@@ -53,7 +53,7 @@ async function transcribeAndDiarize(event) {
     const loader = document.getElementById("loader");
     outputContainer.innerHTML = "";
     loader.style.display = "block";
-
+    
     try {
         const response = await axios.post("/diarize", formData);
         const data = response.data;

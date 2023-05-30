@@ -81,12 +81,9 @@ async def transcribe_and_diarize(wav_file:UploadFile=File(...),labels:str=['posi
     for segment in results_segments_w_speakers["segments"]:
         conversation+=str(segment.get("speaker", "Unknown")+":"+segment["text"])
   
-    chunk_size=200
+    chunk_size=400
     conversation_chunks=[conversation[i:i+chunk_size] for i in range(0, len(conversation), chunk_size)]
     summary=""
-    print(type(conversation_chunks))
-    print(conversation_chunks)
-    print(len(conversation_chunks))
     sentiment=sentiment_analysis([conversation_chunks],labels)
     sentiment=str(sentiment)
     for chunk in conversation_chunks:
