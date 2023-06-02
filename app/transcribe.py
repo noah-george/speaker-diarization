@@ -2,7 +2,7 @@ from typing import List, Dict, Any
 import whisper
 import torch 
 model_name: str='base'
-device: str = "cpu"
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 hf_token='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'
 if torch.cuda.is_available():
       model = whisper.load_model(model_name, device).cuda()

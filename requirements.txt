@@ -13,3 +13,4 @@ setuptools
 sqlalchemy 
 databases[postgresql]
 psycopg2
+scikit-llm

@@ -1,7 +1,7 @@
 import whisper
 import torch
 model_name: str='base'
-device: str = "cpu"
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 hf_token='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'
 
 if torch.cuda.is_available():

@@ -1,15 +1,14 @@
-from skllm import ZeroShotGPTClassifier
-from skllm.datasets import get_classification_dataset
-from skllm.config import SKLLMConfig
-SKLLMConfig.set_openai_key("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")
-SKLLMConfig.set_openai_org("Personal")
+from transformers import pipeline
+from transformers import AutoModelForSequenceClassification
+from transformers import TFAutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoConfig
+MODEL = f"cardiffnlp/twitter-roberta-base-sentiment-latest"
+tokenizer = AutoTokenizer.from_pretrained(MODEL)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL)
+sentimenter=pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
 
-def sentiment_analysis(text,labels):
-    clf = ZeroShotGPTClassifier()
-    clf.fit(None, labels)
-    print(text)
-    label = clf.predict(text)
-    print(label)
-    print(len(label))
-    return label
+def sentiment_analysis(text):
+    sentiment=sentimenter(text)
+    print(sentiment)
+    return sentiment
