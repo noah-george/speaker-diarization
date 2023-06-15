@@ -16,3 +16,4 @@ async def transcribe_audio(audio_file: str) -> 'dict[str, Any]':
         "segments": result["segments"],
         "language_code": language_code,
     }
+#write code to find 

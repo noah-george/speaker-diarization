@@ -19,7 +19,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Text
 from pydantic import BaseModel
 from sentiment import sentiment_analysis
-import soundfile as sf
+
+
 DATABASE_URL = "postgresql://postgres:pass%40123@localhost/transcriptions"
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
@@ -74,7 +75,6 @@ async def save_text_file(text_file: FileStruct):
 
 @app.post("/diarize")
 async def transcribe_and_diarize(wav_file:UploadFile=File(...),labels:str=['positive', 'negative', 'neutral']) -> 'list[dict[str, Any]]':
-    loudness(wav_file.filename)
     audio_file = whisperx.load_audio(str(wav_file.filename))
     transcript = await transcribe_audio(audio_file)
     aligned_segments = whisperx.align(transcript["segments"], model_a, metadata, audio_file, device, return_char_alignments=False)
@@ -106,7 +106,7 @@ sentiment:
 {sentiment}"""
     return text
 app.post("/transcribe")
-async def transcribe():
+async def transcribe(wav_file):
     audio_file = whisperx.load_audio(str(wav_file.filename))
     transcript = await transcribe_audio(audio_file)
     return transcript

@@ -46,9 +46,6 @@ async function transcribeAndDiarize(event) {
     const file = document.getElementById("audio-file").files[0];
     const formData = new FormData();
     formData.append("wav_file", file);
-    const stringList = Array.from(document.getElementById("string-items").getElementsByTagName("li"));
-    const strings = stringList.map(item => item.textContent.trim());
-    formData.append("labels", JSON.stringify(strings));
     const outputContainer = document.getElementById("output-container");
     const loader = document.getElementById("loader");
     outputContainer.innerHTML = "";
@@ -71,6 +68,9 @@ async function transcribeAndDiarize(event) {
             saveTextToFile(filename);}
             );
         outputContainer.appendChild(saveButton);
+        const img = document.createElement('img');
+        img.src = 'amplitude.png'; // Replace with the actual path to your image
+        outputContainer.appendChild(img);
     }
     catch (error) {
         console.error(error);

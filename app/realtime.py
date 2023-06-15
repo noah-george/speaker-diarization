@@ -45,6 +45,7 @@ async def handle_websocket(websocket, path):
     p.terminate()
 
 # Start WebSocket server
+print(2)
 start_server = websockets.serve(handle_websocket, HOST, PORT)
 print(1)
 # Run the event loop
